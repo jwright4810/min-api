@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors'); 
 const knex = require('knex');
 const moment = require('moment');
-const goalRange = require('./controllers/goalRange') 
+const goals = require('./controllers/goals') 
+const register = require('./controllers/register');
+const bcrypt = require('bcrypt-nodejs'); 
 
 const db = knex({
     client: 'pg',
@@ -14,15 +16,16 @@ const db = knex({
         database : 'min_journal'
     } 
  });
-const date = moment; 
+
+ const date = moment; 
 
 const app = express(); 
 app.use(bodyParser.json()); 
 app.use(cors()); 
 
-
-app.get('/setgoals', (req, res) => { goalRange.setGoals(req, res, db, date) })
-
+app.get('/', (req, res) => {res.send('it is working!')})
+app.put('/submitgoals', (req, res) => { goals.handleSubmitGoals(req, res, db) })
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt, date) })
 app.listen(3000, ()=> {
     console.log('app is running on port 3000'); 
 })
