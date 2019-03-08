@@ -1,12 +1,11 @@
 
-const handleRegister = (req, res, db, bcrypt, date) => {
-    const { email, name, password} = req.body;
+const handleRegister = (req, res, db, bcrypt) => {
+    const { email, name, password, birthday} = req.body;
     if (!email || !name || !password) {
         return res.status(400).json('incorrect form submission')
     }
     const hash = bcrypt.hashSync(password);
-    const goalStart = date().format('L');
-    const goalEnd = date().add(30, 'days').format('L')
+
     db.transaction(trx => {
         trx.insert({
             hash: hash,
@@ -20,8 +19,8 @@ const handleRegister = (req, res, db, bcrypt, date) => {
             .insert({
                 email: loginEmail[0],
                 name: name,
-                goal_start: goalStart,
-                goal_end: goalEnd
+                birthday: birthday
+
             })
             .then(user => {
                 res.json(user[0]);

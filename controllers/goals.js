@@ -40,6 +40,25 @@ const handleSubmitGoals = (req, res, db) => {
     .catch(err => res.status(400).json(err))
 } 
 
+const handleLoadGoals = (req, res, db, date) => {
+
+    const { id } =req.body
+
+    const goalStart = date().format('L');
+    const goalEnd = date().add(30, 'days').format('L')
+
+    db('journal_cycle')
+      .returning(['goal_start', 'goal_end'])
+      .insert({
+        goal_start: goalStart,
+        goal_end: goalEnd,
+        user_id: id 
+      })
+      .then(data => res.json(data[0]))
+      .catch(err => res.status(400).json(err))
+}
+
 module.exports = {
-  handleSubmitGoals: handleSubmitGoals
+  handleSubmitGoals: handleSubmitGoals,
+  handleLoadGoals: handleLoadGoals
 }

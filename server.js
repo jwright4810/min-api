@@ -27,7 +27,8 @@ app.use(cors());
 
 app.get('/', (req, res) => {res.send('it is working!')})
 app.put('/submitgoals', (req, res) => { goals.handleSubmitGoals(req, res, db) })
-app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt, date) })
+app.put('/newGoalCycle', (req, res) => { goals.handleLoadGoals(req, res, db, date) })
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
 app.post('/signin', (req, res) => {signin.handleSignin(req, res, db, bcrypt) })
 app.listen(3000, ()=> {
     console.log('app is running on port 3000'); 
